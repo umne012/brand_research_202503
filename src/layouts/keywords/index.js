@@ -57,8 +57,8 @@ function Keywords() {
 
   const fetchMentionCounts = async () => {
     const categories = {
-      "뉴스": "https://openapi.naver.com/v1/search/news.json",
-      "블로그": "https://openapi.naver.com/v1/search/blog.json",
+      뉴스: "https://openapi.naver.com/v1/search/news.json",
+      블로그: "https://openapi.naver.com/v1/search/blog.json",
     };
 
     const getTotal = async (query, exclude, url, date) => {
