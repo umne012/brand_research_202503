@@ -50,7 +50,6 @@ import Keywords from "layouts/keywords";
 import Associations from "layouts/associations";
 import Sentiment from "layouts/sentiment";
 
-
 // @mui icons
 import Icon from "@mui/material/Icon";
 
@@ -87,9 +86,6 @@ const routes = [
     route: "/sentiment",
     component: <Sentiment />,
   },
-
-
-  
   {
     type: "collapse",
     name: "Dashboard",
