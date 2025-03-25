@@ -1,47 +1,16 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// @mui material components
 import Grid from "@mui/material/Grid";
-
-// Material Dashboard 2 React components
 import MDBox from "components/MDBox";
-
-// Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-import ReportsBarChart from "examples/Charts/BarCharts/ReportsBarChart";
-import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
 import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
 
-// Data
-import reportsBarChartData from "layouts/dashboard/data/reportsBarChartData";
-import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
-
-// Dashboard components
-import Projects from "layouts/dashboard/components/Projects";
-import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
-
-function Dashboard() {
-  const { sales, tasks } = reportsLineChartData;
-
+function Sentiment() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox py={3}>
+        {/* 상단 카드 영역 */}
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
@@ -53,7 +22,7 @@ function Dashboard() {
                 percentage={{
                   color: "success",
                   amount: "+55%",
-                  label: "than lask week",
+                  label: "than last week",
                 }}
               />
             </MDBox>
@@ -103,54 +72,29 @@ function Dashboard() {
             </MDBox>
           </Grid>
         </Grid>
+
+        {/* 2x2 그래프 영역 (향후 D3.js 긍부정 그래프 삽입 위치) */}
         <MDBox mt={4.5}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsBarChart
-                  color="info"
-                  title="website views"
-                  description="Last Campaign Performance"
-                  date="campaign sent 2 days ago"
-                  chart={reportsBarChartData}
-                />
+            <Grid item xs={12} md={6} lg={6}>
+              <MDBox mb={3} style={{ height: "300px", backgroundColor: "#f0f2f5" }}>
+                {/* 예: D3 긍정 워드클라우드 1 */}
               </MDBox>
             </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsLineChart
-                  color="success"
-                  title="daily sales"
-                  description={
-                    <>
-                      (<strong>+15%</strong>) increase in today sales.
-                    </>
-                  }
-                  date="updated 4 min ago"
-                  chart={sales}
-                />
+            <Grid item xs={12} md={6} lg={6}>
+              <MDBox mb={3} style={{ height: "300px", backgroundColor: "#f0f2f5" }}>
+                {/* 예: D3 부정 워드클라우드 1 */}
               </MDBox>
             </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsLineChart
-                  color="dark"
-                  title="completed tasks"
-                  description="Last Campaign Performance"
-                  date="just updated"
-                  chart={tasks}
-                />
+            <Grid item xs={12} md={6} lg={6}>
+              <MDBox mb={3} style={{ height: "300px", backgroundColor: "#f0f2f5" }}>
+                {/* 예: D3 긍정 워드클라우드 2 */}
               </MDBox>
             </Grid>
-          </Grid>
-        </MDBox>
-        <MDBox>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={8}>
-              <Projects />
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <OrdersOverview />
+            <Grid item xs={12} md={6} lg={6}>
+              <MDBox mb={3} style={{ height: "300px", backgroundColor: "#f0f2f5" }}>
+                {/* 예: D3 부정 워드클라우드 2 */}
+              </MDBox>
             </Grid>
           </Grid>
         </MDBox>
@@ -160,4 +104,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Sentiment;
