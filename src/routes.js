@@ -45,10 +45,51 @@ import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 
+import Report from "layouts/report";
+import Keywords from "layouts/keywords";
+import Associations from "layouts/associations";
+import Sentiment from "layouts/sentiment";
+
+
 // @mui icons
 import Icon from "@mui/material/Icon";
 
 const routes = [
+  {
+    type: "collapse",
+    name: "종합 리포트",
+    key: "report",
+    icon: <Icon fontSize="small">analytics</Icon>,
+    route: "/report",
+    component: <Report />,
+  },
+  {
+    type: "collapse",
+    name: "검색어 분석",
+    key: "keywords",
+    icon: <Icon fontSize="small">search</Icon>,
+    route: "/keywords",
+    component: <Keywords />,
+  },
+  {
+    type: "collapse",
+    name: "연관어 분석",
+    key: "associations",
+    icon: <Icon fontSize="small">hub</Icon>,
+    route: "/associations",
+    component: <Associations />,
+  },
+  {
+    type: "collapse",
+    name: "긍부정 분석",
+    key: "sentiment",
+    icon: <Icon fontSize="small">mood</Icon>,
+    route: "/sentiment",
+    component: <Sentiment />,
+  },
+
+
+  
   {
     type: "collapse",
     name: "Dashboard",
