@@ -23,32 +23,22 @@ function Keywords() {
 
   const fetchSearchTrends = async () => {
     try {
-      const response = await fetch("https://openapi.naver.com/v1/datalab/search", {
+      const response = await fetch("/api/getSearchTrends", {
         method: "POST",
-        headers: {
-          "X-Naver-Client-Id": process.env.REACT_APP_NAVER_CLIENT_ID,
-          "X-Naver-Client-Secret": process.env.REACT_APP_NAVER_CLIENT_SECRET,
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           startDate,
           endDate,
-          timeUnit: "date",
-          keywordGroups: searchGroups.map(({ groupName, keywords }) => ({
-            groupName,
-            keywords,
-          })),
+          keywordGroups: searchGroups.map(({ groupName, keywords }) => ({ groupName, keywords })),
         }),
       });
 
       const result = await response.json();
-
       const labels = result.results[0].data.map((item) => item.period);
       const datasets = result.results.map((group) => ({
         label: group.title,
         data: group.data.map((d) => d.ratio),
       }));
-
       setSearchVolumeData({ labels, datasets });
     } catch (error) {
       console.error("🔴 검색트렌드 API 오류:", error);
@@ -56,76 +46,19 @@ function Keywords() {
   };
 
   const fetchMentionCounts = async () => {
-    const categories = {
-      뉴스: "https://openapi.naver.com/v1/search/news.json",
-      블로그: "https://openapi.naver.com/v1/search/blog.json",
-    };
-
-    const getTotal = async (query, exclude, url, date) => {
-      const excludeQuery = exclude.map((word) => `-${word}`).join(" ");
-      const fullQuery = `${query} ${excludeQuery} ${date}`;
-
-      const params = new URLSearchParams({
-        query: fullQuery,
-        display: 1,
-        start: 1,
-        sort: "date",
+    try {
+      const response = await fetch("/api/getMentionCounts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ startDate, endDate, searchGroups }),
       });
-
-      const res = await fetch(`${url}?${params}`, {
-        method: "GET",
-        headers: {
-          "X-Naver-Client-Id": process.env.REACT_APP_NAVER_CLIENT_ID_2,
-          "X-Naver-Client-Secret": process.env.REACT_APP_NAVER_CLIENT_SECRET_2,
-        },
-      });
-
-      if (!res.ok) return 0;
-      const json = await res.json();
-      return json.total || 0;
-    };
-
-    const dateList = getDateList(startDate, endDate);
-    const datasetsMap = {};
-
-    for (const { groupName, keywords, exclude } of searchGroups) {
-      for (const category in categories) {
-        let total = 0;
-        for (const date of dateList) {
-          for (const keyword of keywords) {
-            total += await getTotal(keyword, exclude, categories[category], date);
-            await sleep(300); // 요청 간격
-          }
-        }
-
-        const datasetKey = `${groupName} (${category})`;
-        datasetsMap[datasetKey] = total;
-      }
+      const result = await response.json();
+      setMentionVolumeData(result);
+    } catch (error) {
+      console.error("🔴 언급량 API 오류:", error);
     }
-
-    const labels = Object.keys(datasetsMap);
-    const data = Object.values(datasetsMap);
-
-    setMentionVolumeData({
-      labels,
-      datasets: [{ label: "언급량 합계", data }],
-    });
   };
 
-  const getDateList = (start, end) => {
-    const dates = [];
-    const s = new Date(start);
-    const e = new Date(end);
-    while (s <= e) {
-      dates.push(s.toISOString().slice(0, 10));
-      s.setDate(s.getDate() + 1);
-    }
-    return dates;
-  };
-
-  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-  // 날짜 바뀔 때마다 데이터 다시 요청
   useEffect(() => {
     if (startDate && endDate) {
       fetchSearchTrends();
@@ -175,13 +108,13 @@ function Keywords() {
             </MDBox>
           </Grid>
 
-          {/* 뉴스·블로그 언급량 막대차트 */}
+          {/* 뉴스·블로그 언급량 라인차트 */}
           <Grid item xs={12}>
             <MDBox mb={3}>
-              <ReportsBarChart
+              <ReportsLineChart
                 color="dark"
                 title="뉴스·블로그 언급량"
-                description="브랜드별 카테고리별 언급량 합계"
+                description="브랜드별 카테고리별 언급량 추이"
                 date={`${startDate} ~ ${endDate}`}
                 chart={mentionVolumeData || { labels: [], datasets: [] }}
               />
