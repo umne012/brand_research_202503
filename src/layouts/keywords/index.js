@@ -6,7 +6,6 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
-import ReportsBarChart from "examples/Charts/BarCharts/ReportsBarChart";
 
 function Keywords() {
   const [searchVolumeData, setSearchVolumeData] = useState(null);
@@ -34,6 +33,8 @@ function Keywords() {
       });
 
       const result = await response.json();
+      if (!result?.results?.length) return;
+
       const labels = result.results[0].data.map((item) => item.period);
       const datasets = result.results.map((group) => ({
         label: group.title,
