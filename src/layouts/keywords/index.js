@@ -33,13 +33,15 @@ function Keywords() {
       });
 
       const result = await response.json();
-      if (!result?.results?.length) return;
+
+      if (!result?.results || result.results.length === 0) return;
 
       const labels = result.results[0].data.map((item) => item.period);
       const datasets = result.results.map((group) => ({
         label: group.title,
         data: group.data.map((d) => d.ratio),
       }));
+
       setSearchVolumeData({ labels, datasets });
     } catch (error) {
       console.error("🔴 검색트렌드 API 오류:", error);
@@ -53,7 +55,11 @@ function Keywords() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ startDate, endDate, searchGroups }),
       });
+
       const result = await response.json();
+
+      if (!result?.labels || !result?.datasets) return;
+
       setMentionVolumeData(result);
     } catch (error) {
       console.error("🔴 언급량 API 오류:", error);
